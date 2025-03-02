@@ -7,11 +7,15 @@ app = Flask(__name__)
 @app.route('/sms', methods=['POST'])
 def receive_sms():
     data = request.get_json()  # Получаем данные JSON из POST-запроса
+
+    # Проверяем, что все обязательные поля присутствуют
     if not data or 'sender' not in data or 'message' not in data:
         return jsonify({"error": "Invalid data"}), 400
 
     # Отправляем полученные данные в Telegram
     response = send_sms_to_telegram(data)
+    
+    # Возвращаем ответ от Telegram API
     return jsonify(response), 200
 
 if __name__ == '__main__':
